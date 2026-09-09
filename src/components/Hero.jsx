@@ -3,7 +3,7 @@ import './Hero.css';
 import Header from './Header';
 
 // ---- Image sequence config ----
-const FRAME_FOLDER = '/images/Video%20Project%205'; // adjust if you move the folder
+const FRAME_FOLDER = '/images/Video-Project-5'; // adjust if you move the folder
 const TOTAL_FRAMES = 959; // 0001.png ...0959.png
 const frameSrc = (i) => `${FRAME_FOLDER}/${String(i + 1).padStart(4, '0')}.png`;
 
@@ -17,7 +17,9 @@ const Hero = () => {
   const canvasRef = useRef(null)
   const imagesRef = useRef([])
   const currentFrameRef = useRef(0)
+  const lastPercentRef = useRef(0)
   const [imagesLoaded, setImagesLoaded] = useState(false)
+  const [loadProgress, setLoadProgress] = useState(0)
 
   // existing mouse-tracking effect (kept as-is)
   useEffect(() => {
@@ -44,15 +46,17 @@ const Hero = () => {
     for (let i = 0; i < TOTAL_FRAMES; i++) {
       const img = new Image()
       img.src = frameSrc(i)
-      img.onload = () => {
+      const handleDone = () => {
         loadedCount++
+        const percent = Math.floor((loadedCount / TOTAL_FRAMES) * 100)
+        if (!cancelled && percent !== lastPercentRef.current) {
+          lastPercentRef.current = percent
+          setLoadProgress(percent)
+        }
         if (!cancelled && loadedCount === TOTAL_FRAMES) setImagesLoaded(true)
       }
-      img.onerror = () => {
-        // don't let one missing frame block the whole sequence
-        loadedCount++
-        if (!cancelled && loadedCount === TOTAL_FRAMES) setImagesLoaded(true)
-      }
+      img.onload = handleDone
+      img.onerror = handleDone // don't let one missing frame block the whole sequence
       imgs[i] = img
     }
     imagesRef.current = imgs
@@ -145,6 +149,15 @@ const Hero = () => {
       <Header heroWrapperRef={wrapperRef} />
       <div className="hero-scroll-wrapper" ref={wrapperRef} style={{ height: `${SCRUB_VH}vh` }}>
         <section className="hero" ref={containerRef} id="hero">
+          <div className={`hero-loading ${imagesLoaded ? 'is-hidden' : ''}`} aria-live="polite" aria-busy={!imagesLoaded}>
+            <div className="hero-loading-inner">
+              <span className="hero-loading-label">COSBOS</span>
+              <div className="hero-loading-bar">
+                <div className="hero-loading-fill" style={{ width: `${loadProgress}%` }} />
+              </div>
+              <span className="hero-loading-percent">{loadProgress}%</span>
+            </div>
+          </div>
           <div className="hero-bg">
             <div className="hero-gradient"></div>
             <canvas className="hero-canvas" ref={canvasRef} />
