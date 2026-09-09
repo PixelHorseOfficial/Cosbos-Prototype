@@ -1,0 +1,148 @@
+.philosophy { 
+  position: relative;
+  background: #0a0a0a;
+  color: #f5f3ef;
+   padding: 140px 40px; 
+   width :100%;
+   height: 100vh;
+   overflow: hidden;
+   font-family: "Cormorant Garamond", serif;
+ }
+
+.philosophy-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5; /* adjust manually as needed */
+  z-index: 0;
+}
+
+.philosophy-header { position: relative; z-index: 1; max-width: 1440px; margin: 0 auto 100px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; }
+.philosophy-header .section-number { color: rgb(255, 255, 255); }
+.philosophy-header h2 {   font-family: "Cormorant Garamond", serif; font-size:65px; line-height: 0.95; font-weight: 400; }
+
+.philosophy-grid {
+  position: relative;
+  z-index: 1;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* --- entrance: each card rises + fades in, staggered by inline transitionDelay --- */
+.phil-card-wrap {
+  border-right: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  opacity: 0;
+  transform: translateY(48px);
+  transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+.phil-card-wrap:last-child { border-right: 0; }
+.philosophy-grid.in-view .phil-card-wrap { opacity: 1; transform: translateY(0); }
+
+/* --- the tilting surface: transform is written every frame by JS (rAF), not CSS --- */
+.phil-card {
+  position: relative;
+  overflow: hidden;
+  padding: 48px 40px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: background 0.4s ease;
+  --mx: 50%;
+  --my: 50%;
+  --depth: 0;
+}
+.phil-card:hover { background: rgba(255,255,255,0.025); }
+
+/* cursor-tracking spotlight, intensity reacts to tilt depth */
+.phil-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(380px circle at var(--mx) var(--my), rgba(255,255,255,0.1), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.phil-card:hover::before { opacity: 1; }
+
+/* animated border trace — draws itself around the card on hover */
+.phil-border {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+.phil-border-rect {
+  stroke: rgba(245,243,239,0.9);
+  stroke-width: 1;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+.phil-card:hover .phil-border-rect { stroke-dashoffset: 0; }
+
+/* oversized ghost numeral, rises up from behind the copy on hover */
+.phil-card::after {
+  content: attr(data-num);
+  position: absolute;
+  right: -0.08em;
+  bottom: -0.28em;
+  font-family: 'Bodoni Moda', serif;
+  font-size: 220px;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.09);
+  transform: translateY(24px);
+  opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.7s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.phil-card:hover::after { opacity: 1; transform: translateY(0); }
+
+.phil-card-top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 80px; }
+.phil-num { font-family: 'JetBrains Mono', monospace; font-size: 18px; opacity: 0.8; transition: opacity 0.4s ease; }
+.phil-card:hover .phil-num { opacity: 0.3; }
+
+/* magnetic tag: JS drives translate(), CSS handles the color-fill on hover */
+.phil-tag {
+  display: inline-block;
+  font-size: 20px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 4px 8px;
+  transition: background 0.4s cubic-bezier(0.65,0,0.35,1), color 0.4s ease, border-color 0.4s ease;
+  will-change: transform;
+}
+.phil-card:hover .phil-tag { background: #f5f3ef; color: #0a0a0a; border-color: #f5f3ef; }
+
+.phil-card h3 {
+  position: relative;
+  z-index: 1;
+  font-family: 'Bodoni Moda', serif;
+  font-size: 35px;
+  margin-bottom: 16px;
+  font-weight: 400;
+  transform: translateX(calc(var(--depth) * 4px));
+  transition: transform 0.3s ease-out;
+}
+
+.phil-card p { position: relative; z-index: 1; font-size: 20px; line-height: 1.7; opacity: 0.8; }
+
+@media (max-width: 900px) {
+  .philosophy { padding: 80px 24px; height: auto; overflow: visible; }
+  .philosophy-header { grid-template-columns: 1fr; gap: 24px; margin-bottom: 60px; }
+  .philosophy-grid { grid-template-columns: 1fr; }
+  .phil-card-wrap { border-right: 0; }
+  .phil-card { padding: 32px 0; }
+  .phil-card::after { font-size: 140px; }
+}

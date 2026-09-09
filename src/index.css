@@ -1,0 +1,25 @@
+
+:root {
+  --bg: #0a0a0a;
+  --bg-soft: #111111;
+  --paper: #f5f3ef;
+  --paper-2: #ebe8e2;
+  --ink: #0a0a0a;
+  --ink-soft: rgba(0,0,0,0.6);
+  --gold: #c4a484;
+  --gold-light: #dccab3;
+  --line: rgba(0,0,0,0.12);
+  --line-light: rgba(255,255,255,0.1);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--gold); color: black; }

@@ -1,0 +1,16 @@
+.footer { background: #0a0a0a; color: #f5f3ef; padding: 80px 40px 0; font-family: "Cormorant Garamond", serif; }
+.footer-top { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.5fr; gap: 80px; padding-bottom: 60px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.footer-brand .footer-logo { font-family: 'Bodoni Moda', serif; font-size: 28px; letter-spacing: 0.2em; }
+.footer-brand .footer-tagline { font-size: 15px; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.8; margin-bottom: 20px; }
+.footer-brand p { font-size: 15px; line-height: 1.6; opacity: 1; max-width: 36ch; }
+.footer-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.link-group span { font-family: 'JetBrains Mono', monospace; font-size: 18px; letter-spacing: 0.2em; opacity: 0.6; display: block; margin-bottom: 16px; }
+.link-group a { display: block; font-size: 15px; color: rgb(255, 255, 255); text-decoration: none; padding: 6px 0; transition: color 0.3s; }
+.link-group a:hover { color: white; }
+.footer-bottom { max-width: 1440px; margin: 0 auto; padding: 24px 0; display: flex; justify-content: space-between; font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; }
+@media (max-width: 900px) {
+  .footer { padding: 60px 24px 0; }
+  .footer-top { grid-template-columns: 1fr; gap: 40px; }
+  .footer-links { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 8px; }
+}
