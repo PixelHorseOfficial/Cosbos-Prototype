@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './ProductShowcase.css'
 
 const products = [
@@ -51,6 +52,13 @@ const products = [
 
 const ProductShowcase = () => {
   const [activeProduct, setActiveProduct] = useState(products[0])
+  const navigate = useNavigate()
+
+  const goToCheckout = (product) => {
+    // Product travels with the navigation so the checkout page can render
+    // the right name / size / price without re-fetching anything.
+    navigate(`/checkout/${product.id}`, { state: { product } })
+  }
 
   return (
     <section className="products" id="products">
@@ -64,7 +72,12 @@ const ProductShowcase = () => {
               className="product-item"
               key={p.id}
               onMouseEnter={() => setActiveProduct(p)}
-              onClick={() => setActiveProduct(p)}
+              onClick={() => goToCheckout(p)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') goToCheckout(p)
+              }}
             >
               <div className="product-thumb">
                 <img src={p.image} alt={p.name} loading="lazy" />

@@ -3,13 +3,18 @@ import './Hero.css';
 import Header from './Header';
 
 // ---- Image sequence config ----
-const FRAME_FOLDER = '/images/Video-Project-5'; // adjust if you move the folder
-const TOTAL_FRAMES = 959; // 0001.png ...0959.png
+const FRAME_FOLDER = '/images/Video-project-7'; // adjust if you move the folder
+const TOTAL_FRAMES = 191; // 0001.png ...0191.png
 const frameSrc = (i) => `${FRAME_FOLDER}/${String(i + 1).padStart(4, '0')}.png`;
 
 // How much scroll distance (in viewport heights) it takes to play through
 // the whole sequence. Higher = slower scrub. Tweak to taste.
-const SCRUB_VH = 400;
+const SCRUB_VH = 600;
+
+// How quickly the displayed frame catches up to the scroll-derived target
+// frame, each animation tick. Lower = smoother/slower catch-up (more of a
+// "trailing" feel), higher = snappier and closer to 1:1 with scroll input.
+const SMOOTHING = 0.12;
 
 const Hero = () => {
   const containerRef = useRef(null)
@@ -17,6 +22,9 @@ const Hero = () => {
   const canvasRef = useRef(null)
   const imagesRef = useRef([])
   const currentFrameRef = useRef(0)
+  const targetFrameRef = useRef(0)
+  const displayFrameRef = useRef(0)
+  const rafIdRef = useRef(null)
   const lastPercentRef = useRef(0)
   const [imagesLoaded, setImagesLoaded] = useState(false)
   const [loadProgress, setLoadProgress] = useState(0)
@@ -110,37 +118,43 @@ const Hero = () => {
     const wrapper = wrapperRef.current
     if (!wrapper) return
 
-    let ticking = false
-
-    const update = () => {
+    // Recompute which frame the current scroll position corresponds to.
+    // This only sets the *target* — the rAF loop below eases toward it.
+    const updateTarget = () => {
       const rect = wrapper.getBoundingClientRect()
       const scrollDistance = wrapper.offsetHeight - window.innerHeight
       const scrolled = Math.min(Math.max(-rect.top, 0), Math.max(scrollDistance, 1))
       const progress = scrollDistance > 0 ? scrolled / scrollDistance : 0
-      const frameIndex = Math.min(
-        TOTAL_FRAMES - 1,
-        Math.floor(progress * TOTAL_FRAMES)
-      )
-      if (frameIndex !== currentFrameRef.current || progress === 0) {
+      targetFrameRef.current = progress * (TOTAL_FRAMES - 1)
+    }
+
+    // Runs every animation frame (not just on scroll events) so the
+    // displayed frame glides toward the target instead of jumping to it.
+    const animate = () => {
+      const target = targetFrameRef.current
+      const current = displayFrameRef.current
+      const diff = target - current
+      const next = Math.abs(diff) < 0.05 ? target : current + diff * SMOOTHING
+      displayFrameRef.current = next
+
+      const frameIndex = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.round(next)))
+      if (frameIndex !== currentFrameRef.current) {
         currentFrameRef.current = frameIndex
         drawFrame(frameIndex)
       }
-      ticking = false
+      rafIdRef.current = requestAnimationFrame(animate)
     }
 
-    const onScrollOrResize = () => {
-      if (ticking) return
-      ticking = true
-      requestAnimationFrame(update)
-    }
-
-    window.addEventListener('scroll', onScrollOrResize, { passive: true })
-    window.addEventListener('resize', onScrollOrResize)
-    update() // draw the initial frame
+    window.addEventListener('scroll', updateTarget, { passive: true })
+    window.addEventListener('resize', updateTarget)
+    updateTarget()
+    drawFrame(0) // draw the initial frame immediately, before easing kicks in
+    rafIdRef.current = requestAnimationFrame(animate)
 
     return () => {
-      window.removeEventListener('scroll', onScrollOrResize)
-      window.removeEventListener('resize', onScrollOrResize)
+      window.removeEventListener('scroll', updateTarget)
+      window.removeEventListener('resize', updateTarget)
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current)
     }
   }, [imagesLoaded])
 
