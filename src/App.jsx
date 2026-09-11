@@ -9,7 +9,7 @@ import SalonSystem from './components/SalonSystem'
 import Partners from './components/Partners'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
-import CheckoutPage from './components/CheckoutPage'
+import CheckoutPage from './components/Checkoutpage'
 
 function HomePage() {
   return (
