@@ -77,147 +77,153 @@ const CheckoutPage = () => {
           <p>Complete your professional order. Disulfide-safe delivery.</p>
         </div>
 
-        <div className="checkout-section">
-          <div className="checkout-row checkout-row--label">
-            <span>ORDER</span>
-            <span className="checkout-accent">1 ITEM</span>
-          </div>
-          <div className="checkout-item">
-            {product.name} — {product.size} × 1 — ₹{subtotal.toFixed(2)}
-          </div>
-        </div>
-
-        <div className="checkout-section checkout-totals">
-          <div className="checkout-row">
-            <span className="checkout-label">SUBTOTAL</span>
-            <span>₹{subtotal.toFixed(2)}</span>
-          </div>
-          <div className="checkout-row">
-            <span className="checkout-label">SHIPPING</span>
-            <span>Free</span>
-          </div>
-          <div className="checkout-row">
-            <span className="checkout-label">GST (18%)</span>
-            <span>₹{gst.toFixed(2)}</span>
-          </div>
-          {discount > 0 && (
-            <div className="checkout-row checkout-row--discount">
-              <span className="checkout-label">
-                DISCOUNT {couponLabel && <span className="checkout-coupon-label">• {couponLabel}</span>}
-              </span>
-              <span>−₹{discount.toFixed(2)}</span>
-            </div>
-          )}
-          <div className="checkout-row checkout-row--total">
-            <span>TOTAL PAYABLE</span>
-            <span className="checkout-total-value">₹{total.toFixed(2)}</span>
-          </div>
-        </div>
-
-        <div className="checkout-section checkout-coupon">
-          <input
-            value={couponInput}
-            onChange={(e) => setCouponInput(e.target.value)}
-            placeholder="Coupon code"
-          />
-          <button onClick={applyCoupon}>APPLY</button>
-        </div>
-
-        <div className="checkout-section">
-          <div className="checkout-subhead">BILLING DETAILS</div>
-          <div className="checkout-grid">
-            <label>
-              <span>FULL NAME</span>
-              <input placeholder="A. Sharma" />
-            </label>
-            <label>
-              <span>MOBILE</span>
-              <input placeholder="+91 98XXXX XXXXX" />
-            </label>
-            <label className="checkout-grid-full">
-              <span>ADDRESS</span>
-              <input placeholder="Studio / House no., Street, Area" />
-            </label>
-            <label>
-              <span>PINCODE</span>
-              <input placeholder="1100XX" />
-            </label>
-          </div>
-        </div>
-
-        <div className="checkout-section">
-          <div className="checkout-subhead">PAYMENT METHOD</div>
-          <div className="checkout-methods">
-            {PAYMENT_METHODS.map((m) => (
-              <div key={m.id} className="checkout-method-wrap">
-                <button
-                  onClick={() => setPaymentMethod(m.id)}
-                  className={`checkout-method ${paymentMethod === m.id ? 'is-active' : ''}`}
-                >
-                  <span className="checkout-method-left">
-                    <span className="checkout-method-icon">{m.icon}</span>
-                    <span>
-                      <span className="checkout-method-label">{m.label}</span>
-                      <span className="checkout-method-sub">{m.sub}</span>
-                    </span>
-                  </span>
-                  <span className={`checkout-radio ${paymentMethod === m.id ? 'is-active' : ''}`}>
-                    {paymentMethod === m.id && <span className="checkout-radio-dot" />}
-                  </span>
-                </button>
-
-                {m.id === 'card' && paymentMethod === 'card' && (
-                  <div className="checkout-card-fields">
-                    <label>
-                      <span>CARD NUMBER</span>
-                      <input placeholder="4242 4242 4242 4242" />
-                    </label>
-                    <div className="checkout-grid">
-                      <label>
-                        <span>MM / YY</span>
-                        <input placeholder="12 / 27" />
-                      </label>
-                      <label>
-                        <span>CVV</span>
-                        <input placeholder="•••" className="checkout-cvv" />
-                      </label>
-                    </div>
-                  </div>
-                )}
+        <div className="checkout-columns">
+          <div className="checkout-col checkout-col-left">
+            <div className="checkout-section">
+              <div className="checkout-row checkout-row--label">
+                <span>ORDER</span>
+                <span className="checkout-accent">1 ITEM</span>
               </div>
-            ))}
+              <div className="checkout-item">
+                {product.name} — {product.size} × 1 — ₹{subtotal.toFixed(2)}
+              </div>
+            </div>
+
+            <div className="checkout-section checkout-totals">
+              <div className="checkout-row">
+                <span className="checkout-label">SUBTOTAL</span>
+                <span>₹{subtotal.toFixed(2)}</span>
+              </div>
+              <div className="checkout-row">
+                <span className="checkout-label">SHIPPING</span>
+                <span>Free</span>
+              </div>
+              <div className="checkout-row">
+                <span className="checkout-label">GST (18%)</span>
+                <span>₹{gst.toFixed(2)}</span>
+              </div>
+              {discount > 0 && (
+                <div className="checkout-row checkout-row--discount">
+                  <span className="checkout-label">
+                    DISCOUNT {couponLabel && <span className="checkout-coupon-label">• {couponLabel}</span>}
+                  </span>
+                  <span>−₹{discount.toFixed(2)}</span>
+                </div>
+              )}
+              <div className="checkout-row checkout-row--total">
+                <span>TOTAL PAYABLE</span>
+                <span className="checkout-total-value">₹{total.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <div className="checkout-section checkout-coupon">
+              <input
+                value={couponInput}
+                onChange={(e) => setCouponInput(e.target.value)}
+                placeholder="Coupon code"
+              />
+              <button onClick={applyCoupon}>APPLY</button>
+            </div>
+
+            <div className="checkout-footer-tags">
+              <span>Secure Payment</span>
+              <span>Disulfide-safe</span>
+              <span>No returns on opened products</span>
+            </div>
+
+            <div className="checkout-brand">COSBOS PROFESSIONALS</div>
+          </div>
+
+          <div className="checkout-col checkout-col-right">
+            <div className="checkout-section">
+              <div className="checkout-subhead">BILLING DETAILS</div>
+              <div className="checkout-grid">
+                <label>
+                  <span>FULL NAME</span>
+                  <input placeholder="A. Sharma" />
+                </label>
+                <label>
+                  <span>MOBILE</span>
+                  <input placeholder="+91 98XXXX XXXXX" />
+                </label>
+                <label className="checkout-grid-full">
+                  <span>ADDRESS</span>
+                  <input placeholder="Studio / House no., Street, Area" />
+                </label>
+                <label>
+                  <span>PINCODE</span>
+                  <input placeholder="1100XX" />
+                </label>
+              </div>
+            </div>
+
+            <div className="checkout-section">
+              <div className="checkout-subhead">PAYMENT METHOD</div>
+              <div className="checkout-methods">
+                {PAYMENT_METHODS.map((m) => (
+                  <div key={m.id} className="checkout-method-wrap">
+                    <button
+                      onClick={() => setPaymentMethod(m.id)}
+                      className={`checkout-method ${paymentMethod === m.id ? 'is-active' : ''}`}
+                    >
+                      <span className="checkout-method-left">
+                        <span className="checkout-method-icon">{m.icon}</span>
+                        <span>
+                          <span className="checkout-method-label">{m.label}</span>
+                          <span className="checkout-method-sub">{m.sub}</span>
+                        </span>
+                      </span>
+                      <span className={`checkout-radio ${paymentMethod === m.id ? 'is-active' : ''}`}>
+                        {paymentMethod === m.id && <span className="checkout-radio-dot" />}
+                      </span>
+                    </button>
+
+                    {m.id === 'card' && paymentMethod === 'card' && (
+                      <div className="checkout-card-fields">
+                        <label>
+                          <span>CARD NUMBER</span>
+                          <input placeholder="4242 4242 4242 4242" />
+                        </label>
+                        <div className="checkout-grid">
+                          <label>
+                            <span>MM / YY</span>
+                            <input placeholder="12 / 27" />
+                          </label>
+                          <label>
+                            <span>CVV</span>
+                            <input placeholder="•••" className="checkout-cvv" />
+                          </label>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="checkout-terms">
+              <button
+                className={`checkout-checkbox ${agreed ? 'is-checked' : ''}`}
+                onClick={() => setAgreed(!agreed)}
+                aria-label="Agree to terms"
+              >
+                {agreed && '✓'}
+              </button>
+              <div>
+                I agree to Terms &amp; Shipping Policy
+                <span className="checkout-muted"> — returns not accepted on opened professional use.</span>
+              </div>
+            </div>
+
+            <div className="checkout-pay-wrap">
+              <button className="checkout-pay" onClick={handlePay}>
+                <span>PAY ₹{total.toFixed(2)}</span>
+                <span className="checkout-pay-arrow">→</span>
+              </button>
+              <div className="checkout-secure">Protected by 256-bit SSL • UPI &amp; Cards</div>
+            </div>
           </div>
         </div>
-
-        <div className="checkout-terms">
-          <button
-            className={`checkout-checkbox ${agreed ? 'is-checked' : ''}`}
-            onClick={() => setAgreed(!agreed)}
-            aria-label="Agree to terms"
-          >
-            {agreed && '✓'}
-          </button>
-          <div>
-            I agree to Terms &amp; Shipping Policy
-            <span className="checkout-muted"> — returns not accepted on opened professional use.</span>
-          </div>
-        </div>
-
-        <div className="checkout-pay-wrap">
-          <button className="checkout-pay" onClick={handlePay}>
-            <span>PAY ₹{total.toFixed(2)}</span>
-            <span className="checkout-pay-arrow">→</span>
-          </button>
-          <div className="checkout-secure">Protected by 256-bit SSL • UPI &amp; Cards</div>
-        </div>
-
-        <div className="checkout-footer-tags">
-          <span>Secure Payment</span>
-          <span>Disulfide-safe</span>
-          <span>No returns on opened products</span>
-        </div>
-
-        <div className="checkout-brand">COSBOS PROFESSIONALS</div>
       </div>
     </div>
   )
