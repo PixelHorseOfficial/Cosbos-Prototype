@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
-import './CheckoutPage.css'
+import './Checkoutpage.css'
 
 const PAYMENT_METHODS = [
   { id: 'upi', label: 'UPI', sub: 'GPay • PhonePe • Paytm • BHIM', icon: '◐' },
