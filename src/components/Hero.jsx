@@ -3,7 +3,7 @@ import './Hero.css';
 import Header from './Header';
 
 // ---- Image sequence config ----
-const FRAME_FOLDER = '/images/Video-project-7'; // adjust if you move the folder
+const FRAME_FOLDER = '/sequence/Video-project-7'; // adjust if you move the folder
 const TOTAL_FRAMES = 191; // 0001.png ...0191.png
 const frameSrc = (i) => `${FRAME_FOLDER}/${String(i + 1).padStart(4, '0')}.png`;
 
