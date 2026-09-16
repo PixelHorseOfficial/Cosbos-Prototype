@@ -69,9 +69,10 @@ const ProductShowcase = () => {
         <div className="product-list">
           {products.map((p) => (
             <div
-              className="product-item"
+              className={`product-item ${activeProduct.id === p.id ? 'is-active' : ''}`}
               key={p.id}
               onMouseEnter={() => setActiveProduct(p)}
+              onTouchStart={() => setActiveProduct(p)}
               onClick={() => goToCheckout(p)}
               role="button"
               tabIndex={0}
